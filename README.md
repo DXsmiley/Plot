@@ -2,6 +2,11 @@
 
 A python programs that plots points.
 
+## Installation
+
+1. Download the files and put them where you want.
+2. Get svgwrite: `pip install svgwrite`
+
 ## Usage
 
 `python -m plot "t, t | t [0, 10]"`
