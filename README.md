@@ -13,3 +13,5 @@ Add the flag `--w` to open the result image in your web browser.
 ## Example
 
 `r * sin(x), r * cos(x * 3) | x : [0, 2 * pi] | r : [1, 4, 4]`
+
+![Example 1 Image](https://raw.githubusercontent.com/DXsmiley/Plot/master/example1.png)
