@@ -241,7 +241,7 @@ class Function:
 
 parser = Parser()
 
-for i in '|:,[](){}^.':
+for i in '|:,[](){}^.-':
 	parser.add_atom(i, [i])
 
 parser.add_atom('addition-operator', ['+', '-'])
@@ -284,7 +284,10 @@ parser.add_atom('digit', ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'])
 parser.add_rule('digits', ['digit'])
 parser.add_rule('digits', ['digits', 'digit'], lambda x: x[0] + x[1])
 parser.add_rule('number', ['digits'], lambda x : Number(int(x[0])))
-parser.add_rule('number', ['digits', '.', 'digits'], lambda x : Number(int(x[0]) + (int(x[2]) / (10 ** len(x[2])))))
+parser.add_rule('number', ['-', 'digits'], lambda x : Number(- int(x[1])))
+make_decimal = lambda n, a, b: Number(n * (int(a) + int(b) / (10 ** len(b))))
+parser.add_rule('number', ['digits', '.', 'digits'], lambda x : make_decimal(1, x[0], x[2]))
+parser.add_rule('number', ['-', 'digits', '.', 'digits'], lambda x : make_decimal(-1, x[1], x[3]))
 
 # Variable names
 join_strings = lambda x: ''.join(x)
