@@ -232,7 +232,7 @@ class Function:
 	def evaluate(self, variables):
 		function_object = self.variable.evaluate(variables)
 		parameters = self.arguments.evaluate(variables)
-		return function_object(parameters)
+		return function_object(*parameters)
 
 	def __repr__(self):
 		return 'F:{}({})'.format(repr(self.variable), repr(self.arguments))
@@ -276,7 +276,7 @@ parser.add_rule('peice', ['variable'])
 parser.add_rule('peice', ['function'])
 parser.add_rule('peice', ['bracketed-expression'])
 parser.add_rule('bracketed-expression', ['(', 'tuple', ')'], lambda x: x[1])
-parser.add_rule('function', ['variable', '(', 'tuple', ')'], lambda x: Function(x[0], x[2]))
+parser.add_rule('function', ['variable', '(', 'forced-tuple', ')'], lambda x: Function(x[0], x[2]))
 
 # Numbers
 parser.add_atom('digit', ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'])
