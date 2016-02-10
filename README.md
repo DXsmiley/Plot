@@ -17,7 +17,7 @@ Add the flag `--w` to open the result image in your web browser.
 
 ## Examples
 
-`1.5 * t, t * t | t : [-2, 2]`
+`1.5 * t, t ^ 2 | t : [-2, 2]`
 
 ![Example 3 Image](https://raw.githubusercontent.com/DXsmiley/Plot/master/example3.png)
 
