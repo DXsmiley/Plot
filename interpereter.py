@@ -31,11 +31,13 @@
 		iterator : variable ":" tuple
 		tuple : expression
 		tuple : expression "," tuple
+		forced-tuple : expression
+		forced-tuple : expression "," tuple
 		expression : range
 		expression : set
 		expression : addition
-		range : "[" tuple "]"
-		range : "[~" tuple "]"
+		range : "[" forced-tuple "]"
+		range : "[~" forced-tuple "]"
 		set : "{" tuple "}"
 		addition : addition addition-operator multiplication
 		addition : multiplication
@@ -172,11 +174,12 @@ class Set:
 
 class Tuple:
 
-	def __init__(self, peices):
+	def __init__(self, peices, forced = False):
 		self.peices = peices
+		self.forced = forced
 
 	def evaluate(self, variables):
-		if len(self.peices) == 1:
+		if len(self.peices) == 1 and not self.forced:
 			return self.peices[0].evaluate(variables)
 		else:
 			return tuple(i.evaluate(variables) for i in self.peices)
@@ -250,13 +253,15 @@ parser.add_rule('iterator-list', ['tuple', '|', 'iterator'], lambda x: IteratorL
 parser.add_rule('iterator', ['variable', ':', 'tuple'], lambda x: Iterator(x[0], x[2]))
 parser.add_rule('tuple', ['tuple-peice'], lambda x: Tuple(x[0]))
 parser.add_rule('tuple', ['expression'], lambda x: Tuple(x))
+parser.add_rule('forced-tuple', ['tuple-peice'], lambda x: Tuple(x[0], forced = True))
+parser.add_rule('forced-tuple', ['expression'], lambda x: Tuple(x, forced = True))
 parser.add_rule('tuple-peice', ['expression', ',', 'expression'], lambda x: [x[0], x[2]])
 parser.add_rule('tuple-peice', ['expression', ',', 'tuple-peice'], lambda x: [x[0]] + x[2])
 parser.add_rule('expression', ['range'])
 parser.add_rule('expression', ['set'])
 parser.add_rule('expression', ['addition'])
 # parser.add_rule('expression', ['number'])
-parser.add_rule('range', ['[', 'tuple', ']'], lambda x: Range(x[1]))
+parser.add_rule('range', ['[', 'forced-tuple', ']'], lambda x: Range(x[1]))
 
 # Mathematical expression
 make_binary_op = lambda x : BinaryOperator(x[0], x[2], x[1])
