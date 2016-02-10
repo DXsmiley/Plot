@@ -9,11 +9,11 @@ A python programs that plots points.
 
 ## Usage
 
-`python -m plot "t, t | t [0, 10]"`
+`python -m plot "t, t | t : [0, 10]"`
 
 Add the flag `--w` to open the result image in your web browser.
 
-`python -m plot --w "t, t | t [0, 10]"`
+`python -m plot --w "t, t | t : [0, 10]"`
 
 ## Examples
 
