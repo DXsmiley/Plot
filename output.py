@@ -23,8 +23,8 @@ def writeToSVG(filename, points, html_also = True):
 		svg.add(svg.line((b - 3, a), (b + 3, a), stroke = axis_colour))
 
 	write_count = 0
-	colour_min = min(p[2] for p in points if len(p) == 3)
-	colour_max = max(colour_min + 1, max(p[2] for p in points if len(p) == 3))
+	colour_min = min((p[2] for p in points if len(p) == 3), default = 0)
+	colour_max = max(colour_min + 1, max((p[2] for p in points if len(p) == 3), default = 0))
 	colour_range = colour_max - colour_min
 
 	for p in points:
