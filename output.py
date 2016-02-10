@@ -1,4 +1,5 @@
 import svgwrite
+import colorsys
 
 def writeToSVG(filename, points, html_also = True):
 
@@ -22,12 +23,24 @@ def writeToSVG(filename, points, html_also = True):
 		svg.add(svg.line((b - 3, a), (b + 3, a), stroke = axis_colour))
 
 	write_count = 0
+	colour_min = min(p[2] for p in points if len(p) == 3)
+	colour_max = max(colour_min + 1, max(p[2] for p in points if len(p) == 3))
+	colour_range = colour_max - colour_min
 
-	for x, y in points:
-		cx = (x * scale) + (size / 2)
-		cy = (-y * scale) + (size / 2)
-		if 0 < cx < size and 0 < cy < size:
-			svg.add(svg.circle(center = (cx, cy), r = 1, stroke = svgwrite.rgb(255, 0, 0)))
+	for p in points:
+		if len(p) == 2:
+			x, y = p
+			c = colour_min
+		elif len(p) == 3:
+			x, y, c = p
+		else:
+			raise Exception('Invalid point {}'.format(p))
+		c = (c - colour_min) / colour_range
+		x = (x * scale) + (size / 2)
+		y = (-y * scale) + (size / 2)
+		r, g, b = colorsys.hsv_to_rgb(c, 1, 1)
+		if 0 < x < size and 0 < y < size:
+			svg.add(svg.circle(center = (x, y), r = 1, stroke = svgwrite.rgb(r * 255, g * 255, b * 255)))
 			write_count += 1
 
 	svg.save()
