@@ -74,6 +74,7 @@ from genericparser import Parser
 import string
 import math
 import random
+import data
 
 # Utility
 
@@ -84,6 +85,7 @@ def frange(start, end, step = 1):
 		i += step
 
 # Evaluation objects
+
 
 class Master:
 
@@ -103,14 +105,14 @@ class IteratorList:
 		self.expression = expression
 
 	def evaluate(self, variables):
-		results = set()
+		results = []
 		for i in self.iterator.evaluate(variables):
 			variables[self.iterator.variable.vname] = i
 			item = self.expression.evaluate(variables)
-			if isinstance(item, set):
-				results |= item
+			if isinstance(item, list):
+				results += item
 			else:
-				results.add(item)
+				results.append(item)
 		return results
 
 	def __repr__(self):
@@ -162,7 +164,7 @@ class Range:
 		else:
 			print('Wrong number of arguments for a range generator')
 		step = (end - start) / intervals
-		return set(frange(start, end, step))
+		return list(frange(start, end, step))
 
 	def __repr__(self):
 		return 'R[' + repr(self.my_tuple) + ']'
@@ -173,7 +175,7 @@ class Set:
 		self.my_tuple = my_tuple
 
 	def evaluate(self, variables):
-		return set(self.my_tuple.evaluate(variables))
+		return list(self.my_tuple.evaluate(variables))
 
 class Tuple:
 
@@ -251,6 +253,7 @@ parser.add_atom('addition-operator', ['+', '-'])
 parser.add_atom('multiplication-operator', ['*', '/'])
 
 parser.add_rule('master', ['iterator-list'], lambda x: Master(x[0]))
+parser.add_rule('master', ['expression'], lambda x: Master(x[0]))
 parser.add_rule('iterator-list', ['iterator-list', '|', 'iterator'], lambda x: IteratorList(x[0], x[2]))
 parser.add_rule('iterator-list', ['tuple', '|', 'iterator'], lambda x: IteratorList(x[0], x[2]))
 parser.add_rule('iterator', ['variable', ':', 'tuple'], lambda x: Iterator(x[0], x[2]))
@@ -265,6 +268,7 @@ parser.add_rule('expression', ['set'])
 parser.add_rule('expression', ['addition'])
 # parser.add_rule('expression', ['number'])
 parser.add_rule('range', ['[', 'forced-tuple', ']'], lambda x: Range(x[1]))
+parser.add_rule('set', ['{', 'forced-tuple', '}'], lambda x: Set(x[1]))
 
 # Mathematical expression
 make_binary_op = lambda x : BinaryOperator(x[0], x[2], x[1])
@@ -305,23 +309,28 @@ parser.add_rule('variable-name', ['letter'])
 parser.add_rule('variable', ['variable-name'], lambda x : Variable(x[0]))
 
 def process_points(points, function):
-	out = set()
+	out = []
 	for i in points:
 		if len(i) == 2:
 			x, y = function(i[0], i[1])
-			out.add((x, y))
-		else:
+			out.append((x, y))
+		elif len(i) == 3:
 			x, y = function(i[0], i[1])
 			c = c[2]
-			out.add((x, y, c))
+			out.append((x, y, c))
+		else:
+			out.append(i)
 	return out
 
-def function_scale(amount, *points):
-	return process_points(points[0], lambda x, y: (x * amount, y * amount))
+def function_scale(amount, points):
+	return process_points(points, lambda x, y: (x * amount, y * amount))
 
-def function_kick(amount, *points):
+def function_kick(amount, points):
 	k = lambda x, y: (x + random.uniform(-1, 1) * amount, y + random.uniform(-1, 1) * amount)
-	return process_points(points[0], k)
+	return process_points(points, k)
+
+def function_line(points):
+	return [data.Line(points)]
 
 def evaluate(code, show_parse_tree = False):
 	constants = {
@@ -334,7 +343,8 @@ def evaluate(code, show_parse_tree = False):
 		'min': min,
 		'abs': abs,
 		'scale': function_scale,
-		'kick': function_kick
+		'kick': function_kick,
+		'line': function_line
 	}
 	tokens = list(code.replace(' ', ''))
 	structure = parser.fullparse(tokens, 'master', True)
