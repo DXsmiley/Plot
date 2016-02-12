@@ -42,3 +42,7 @@ if len(points) > 0:
 		# print('Opening in web browser...')
 		url = os.path.abspath("plot.temp.html")
 		webbrowser.open('file://' + url, new = 2)
+
+else:
+
+	print('Plotted no points')
