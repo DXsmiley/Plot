@@ -28,3 +28,8 @@ Add the flag `--w` to open the result image in your web browser.
 `(r + sin(a * 6)) * cos(a), (r + sin(a * 6)) * sin(a), sin(a * 3) | a : [0, 2 * pi, 500] | r : [1, 3, 10]`
 
 ![Example 2 Image](https://raw.githubusercontent.com/DXsmiley/Plot/master/example2.png)
+
+	line((sin(t) * t * 0.1, cos(t) * t * 0.1 | t : [0, 12 * pi]))
+	line((sin(0-t) * t * 0.1, cos(0-t) * t * 0.1 | t : [0, 12 * pi]))
+
+![Example 4 Image](https://raw.githubusercontent.com/DXsmiley/Plot/master/example4.png)
