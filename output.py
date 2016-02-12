@@ -27,7 +27,7 @@ def writeShape(shape, params):
 			x2 = (x2 * params['scale']) + (params['size'] / 2)
 			y2 = (-y2 * params['scale']) + (params['size'] / 2)
 			if 0 < x1 < params['size'] and 0 < y1 < params['size'] and 0 < x2 < params['size'] and 0 < y2 < params['size']:
-				params['svg'].add(params['svg'].line((x1, y1), (x2, y2), stroke = svgwrite.rgb(40, 40, 40)))
+				params['svg'].add(params['svg'].line((x1, y1), (x2, y2), stroke = svgwrite.rgb(255, 0, 0)))
 	else:
 		print('Cannot plot type', type(shape))
 
