@@ -51,7 +51,9 @@
 		peice : contracted-multiplication
 		function : variable "(" tuple ")"
 		function : variable "()" # Will functions without arguments ever be used?
+		function : variable "(" itertor-list ")" # This will come later
 		bracketed-expression : "(" tuple ")"
+		bracketed-expression : "(" iterator-list ")"
 		variable : variable-name
 		variable-name : letter character
 		variable-name : letter
@@ -71,6 +73,7 @@
 from genericparser import Parser
 import string
 import math
+import random
 
 # Utility
 
@@ -276,6 +279,7 @@ parser.add_rule('peice', ['variable'])
 parser.add_rule('peice', ['function'])
 parser.add_rule('peice', ['bracketed-expression'])
 parser.add_rule('bracketed-expression', ['(', 'tuple', ')'], lambda x: x[1])
+parser.add_rule('bracketed-expression', ['(', 'iterator-list', ')'], lambda x: x[1])
 parser.add_rule('function', ['variable', '(', 'forced-tuple', ')'], lambda x: Function(x[0], x[2]))
 
 # Numbers
@@ -300,6 +304,25 @@ parser.add_rule('variable-name', ['letter', 'characters'], join_strings)
 parser.add_rule('variable-name', ['letter'])
 parser.add_rule('variable', ['variable-name'], lambda x : Variable(x[0]))
 
+def process_points(points, function):
+	out = set()
+	for i in points:
+		if len(i) == 2:
+			x, y = function(i[0], i[1])
+			out.add((x, y))
+		else:
+			x, y = function(i[0], i[1])
+			c = c[2]
+			out.add((x, y, c))
+	return out
+
+def function_scale(amount, *points):
+	return process_points(points[0], lambda x, y: (x * amount, y * amount))
+
+def function_kick(amount, *points):
+	k = lambda x, y: (x + random.uniform(-1, 1) * amount, y + random.uniform(-1, 1) * amount)
+	return process_points(points[0], k)
+
 def evaluate(code, show_parse_tree = False):
 	constants = {
 		'pi': math.pi,
@@ -310,6 +333,8 @@ def evaluate(code, show_parse_tree = False):
 		'max': max,
 		'min': min,
 		'abs': abs,
+		'scale': function_scale,
+		'kick': function_kick
 	}
 	tokens = list(code.replace(' ', ''))
 	structure = parser.fullparse(tokens, 'master', True)
