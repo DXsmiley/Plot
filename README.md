@@ -9,11 +9,25 @@ A python programs that plots points.
 
 ## Usage
 
-`python -m plot "t, t | t : [0, 10]"`
+`python -m plot [options] command...`
 
-Add the flag `--w` to open the result image in your web browser.
+Example:
 
-`python -m plot --w "t, t | t : [0, 10]"`
+`python -m plot --w "t, t + 2 | t : [~1]"
+
+### Options
+
+All flags should be prefixed with `--`.
+
+| Flag       | Action                                  |
+| ---------- | --------------------------------------- |
+| help       | Show this help.                         |
+| w, browser | Open the output in the default browser  |
+| parse-tree | Prints the parse tree                   |
+
+### Command Syntax
+
+TODO: Write a tutorial.
 
 ## Examples
 
