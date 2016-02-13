@@ -13,7 +13,7 @@ A python programs that plots points.
 
 Example:
 
-`python -m plot --w "t, t + 2 | t : [~1]"
+`python -m plot --w "t, t + 2 | t : [~1]"`
 
 ### Options
 
