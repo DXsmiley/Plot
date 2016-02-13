@@ -4,11 +4,6 @@ import output
 import interpereter
 import os
 
-# code = '0.2 * x , 0.35 * y | x : [0, 10, 10] | y : [0 , 10, 10]'
-# code = '4 - a, a | a : [0, 10]'
-# code = 'abs(5 * sin(a) - 1), 2 * cos(a * 3) | a : [0, 2 * pi]'
-# code = input('> ')
-
 shapes = []
 codes = []
 
