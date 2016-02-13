@@ -143,8 +143,9 @@ class Variable:
 
 class Range:
 
-	def __init__(self, my_tuple):
+	def __init__(self, my_tuple, symmetric = False):
 		self.my_tuple = my_tuple
+		self.symmetric = symmetric
 
 	def evaluate(self, variables):
 		parameters = self.my_tuple.evaluate(variables)
@@ -152,17 +153,28 @@ class Range:
 		start = 0
 		end = 0
 		intervals = 1000
-		if num_param == 1:
-			end = parameters[0]
-		elif num_param == 2:
-			start = parameters[0]
-			end = parameters[1]
-		elif num_param == 3:
-			start = parameters[0]
-			end = parameters[1]
-			intervals = parameters[2]
+		if self.symmetric:
+			if num_param == 1:
+				start = -parameters[0]
+				end = parameters[0]
+			elif num_param == 2:
+				start = -parameters[0]
+				end = parameters[0]
+				intervals = parameters[1]
+			else:
+				print('Wrong number of arguments for a symmetric range generator')
 		else:
-			print('Wrong number of arguments for a range generator')
+			if num_param == 1:
+				end = parameters[0]
+			elif num_param == 2:
+				start = parameters[0]
+				end = parameters[1]
+			elif num_param == 3:
+				start = parameters[0]
+				end = parameters[1]
+				intervals = parameters[2]
+			else:
+				print('Wrong number of arguments for a range generator')
 		step = (end - start) / intervals
 		return list(frange(start, end, step))
 
@@ -246,7 +258,7 @@ class Function:
 
 parser = Parser()
 
-for i in '|:,[](){}^.-':
+for i in '|:,[](){}^.-~':
 	parser.add_atom(i, [i])
 
 parser.add_atom('addition-operator', ['+', '-'])
@@ -268,6 +280,7 @@ parser.add_rule('expression', ['set'])
 parser.add_rule('expression', ['addition'])
 # parser.add_rule('expression', ['number'])
 parser.add_rule('range', ['[', 'forced-tuple', ']'], lambda x: Range(x[1]))
+parser.add_rule('range', ['[', '~', 'forced-tuple', ']'], lambda x: Range(x[2], symmetric = True))
 parser.add_rule('set', ['{', 'forced-tuple', '}'], lambda x: Set(x[1]))
 
 # Mathematical expression
