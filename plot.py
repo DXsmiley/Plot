@@ -9,7 +9,7 @@ import os
 # code = 'abs(5 * sin(a) - 1), 2 * cos(a * 3) | a : [0, 2 * pi]'
 # code = input('> ')
 
-points = []
+shapes = []
 codes = []
 
 open_browser = False
@@ -32,11 +32,11 @@ for i in sys.argv[1:]:
 		codes.append(i)
 
 for i in codes:
-	points += interpereter.evaluate(i, show_parse_tree = show_parse_tree)
+	shapes.append(interpereter.evaluate(i, show_parse_tree = show_parse_tree))
 
-if len(points) > 0:
+if len(shapes) > 0:
 			
-	output.writeToSVG('plot.temp', points, html_also = open_browser)
+	output.writeToSVG('plot.temp', shapes, html_also = open_browser)
 
 	if open_browser:
 		# print('Opening in web browser...')
@@ -45,4 +45,4 @@ if len(points) > 0:
 
 else:
 
-	print('Plotted no points')
+	print('Plotted no shapes')
