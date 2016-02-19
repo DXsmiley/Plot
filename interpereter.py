@@ -348,6 +348,9 @@ def function_kick(amount, points):
 def function_line(points):
 	return [data.Line(points)]
 
+def function_translate(sx, sy, points):
+	return process_points(points, lambda x, y: (x + sx, y + sy))
+
 def evaluate(code, show_parse_tree = False):
 	constants = {
 		'pi': math.pi,
@@ -360,7 +363,8 @@ def evaluate(code, show_parse_tree = False):
 		'abs': abs,
 		'scale': function_scale,
 		'kick': function_kick,
-		'line': function_line
+		'line': function_line,
+		'move': function_translate
 	}
 	tokens = list(code.replace(' ', ''))
 	structure = parser.fullparse(tokens, 'master', True)
