@@ -48,26 +48,28 @@ def parseShapes(shape):
 			vals['colour_min'] = shape[2]
 	return vals
 
-def writeToSVG(filename, points, html_also = True):
+def writeToSVG(filename, points, html_also = True, show_axies = False):
 
 	size = 800
 	scale = 60
 	tick_frequency = 1
 	svg = svgwrite.Drawing(filename + '.svg', profile = 'tiny')
 
-	axis_colour = svgwrite.rgb(200, 200, 200)
+	if show_axies:
+		
+		axis_colour = svgwrite.rgb(200, 200, 200)
 
-	svg.add(svg.line((size / 2, 0), (size / 2, size), stroke = axis_colour))
-	svg.add(svg.line((0, size / 2), (size, size / 2), stroke = axis_colour))
+		svg.add(svg.line((size / 2, 0), (size / 2, size), stroke = axis_colour))
+		svg.add(svg.line((0, size / 2), (size, size / 2), stroke = axis_colour))
 
-	for i in range(0, size // 2, scale * tick_frequency):
-		a = size / 2 + i
-		b = size / 2
-		svg.add(svg.line((a, b - 3), (a, b + 3), stroke = axis_colour))
-		svg.add(svg.line((b - 3, a), (b + 3, a), stroke = axis_colour))
-		a = size / 2 - i
-		svg.add(svg.line((a, b - 3), (a, b + 3), stroke = axis_colour))
-		svg.add(svg.line((b - 3, a), (b + 3, a), stroke = axis_colour))
+		for i in range(0, size // 2, scale * tick_frequency):
+			a = size / 2 + i
+			b = size / 2
+			svg.add(svg.line((a, b - 3), (a, b + 3), stroke = axis_colour))
+			svg.add(svg.line((b - 3, a), (b + 3, a), stroke = axis_colour))
+			a = size / 2 - i
+			svg.add(svg.line((a, b - 3), (a, b + 3), stroke = axis_colour))
+			svg.add(svg.line((b - 3, a), (b + 3, a), stroke = axis_colour))
 
 	params = parseShapes(points)
 	params['colour_range'] = params['colour_max'] - params['colour_min']

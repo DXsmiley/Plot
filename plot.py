@@ -18,6 +18,7 @@ codes = []
 
 open_browser = False
 show_parse_tree = False
+show_axies = True
 
 for i in sys.argv[1:]:
 	if i.startswith('--'):
@@ -32,6 +33,8 @@ for i in sys.argv[1:]:
 			open_browser = True
 		elif command == 'parse-tree':
 			show_parse_tree = True
+		elif command == 'no-axies':
+			show_axies = False
 		else:
 			print('Unknown command:', command)
 	elif i == '-help' or i == '?' or i == '-?':
@@ -46,7 +49,7 @@ for i in codes:
 
 if len(shapes) > 0:
 			
-	output.writeToSVG('plot.temp', shapes, html_also = open_browser)
+	output.writeToSVG('plot.temp', shapes, show_axies = show_axies, html_also = open_browser)
 
 	if open_browser:
 		# print('Opening in web browser...')

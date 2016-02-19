@@ -24,6 +24,7 @@ All flags should be prefixed with `--`.
 | help       | Show this help.                         |
 | w, browser | Open the output in the default browser  |
 | parse-tree | Prints the parse tree                   |
+| no-axies   | Do not display the axies                |
 
 ### Command Syntax
 
