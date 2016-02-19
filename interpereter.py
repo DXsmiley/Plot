@@ -84,6 +84,10 @@ def frange(start, end, step = 1):
 		yield i
 		i += step
 
+def frange2(start, stop, num_intervals = 1):
+	for i in range(num_intervals + 1):
+		yield start + (i / num_intervals) * (stop - start)
+
 # Evaluation objects
 
 
@@ -175,8 +179,7 @@ class Range:
 				intervals = parameters[2]
 			else:
 				print('Wrong number of arguments for a range generator')
-		step = (end - start) / intervals
-		return list(frange(start, end, step))
+		return list(frange2(start, end, intervals))
 
 	def __repr__(self):
 		return 'R[' + repr(self.my_tuple) + ']'
