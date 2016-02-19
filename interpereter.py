@@ -351,6 +351,9 @@ def function_line(points):
 def function_translate(sx, sy, points):
 	return process_points(points, lambda x, y: (x + sx, y + sy))
 
+def function_angle_distance(a, d):
+	return (d * math.sin(a), d * math.cos(a))
+
 def evaluate(code, show_parse_tree = False):
 	constants = {
 		'pi': math.pi,
@@ -364,7 +367,8 @@ def evaluate(code, show_parse_tree = False):
 		'scale': function_scale,
 		'kick': function_kick,
 		'line': function_line,
-		'move': function_translate
+		'move': function_translate,
+		'ad': function_angle_distance
 	}
 	tokens = list(code.replace(' ', ''))
 	structure = parser.fullparse(tokens, 'master', True)
